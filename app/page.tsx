@@ -1,13 +1,18 @@
-'use client'
-import { useState } from 'react'
+import { HTMLAttributes, ReactNode } from 'react'
 
-//--- tiny helpers
-const Section = ({ children }: { children: React.ReactNode }) => (
-  <section className="max-w-6xl mx-auto px-4 py-20">{children}</section>
+type SectionProps = HTMLAttributes<HTMLElement> & {
+  children: ReactNode
+}
+
+const Section = ({ children, className = '', ...rest }: SectionProps) => (
+  <section
+    {...rest}
+    className={`max-w-6xl mx-auto px-4 py-20 ${className}`}
+  >
+    {children}
+  </section>
 )
-const H2     = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="text-4xl font-semibold text-center mb-12">{children}</h2>
-)
+
 
 export default function Home() {
   // ROI calculator state
