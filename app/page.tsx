@@ -1,11 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { HTMLAttributes, ReactNode } from 'react'
 
 /* ---------- helper components ---------- */
-
-// <Section> accepts all normal <section> props
 type SectionProps = HTMLAttributes<HTMLElement> & { children: ReactNode }
 const Section = ({ children, className = '', ...rest }: SectionProps) => (
   <section
@@ -15,55 +14,85 @@ const Section = ({ children, className = '', ...rest }: SectionProps) => (
     {children}
   </section>
 )
-
 const H2 = ({ children }: { children: ReactNode }) => (
   <h2 className="text-4xl font-semibold text-center mb-12">{children}</h2>
 )
-
 /* ---------- page component ---------- */
-
 export default function Home() {
-  // ROI calculator state
+  /* ----- AOS scroll-reveal init ----- */
+  useEffect(() => {
+    import('aos').then(AOS => AOS.init({ duration: 800, once: true }))
+  }, [])
+
+  /* ----- ROI calculator state ----- */
   const [reps, setReps] = useState(5)
   const [rev, setRev] = useState(10_000)
   const baseline = reps * rev
 
   return (
     <main className="font-sans text-gray-900 bg-white scroll-smooth">
-      {/* HERO */}
-      <div className="bg-orange-100 text-center py-24 px-4">
-        <h1 className="text-5xl font-bold mb-4">
-          Meet <span className="text-orange-600">Lily Bell</span> — The AI Built
-          for Commercial Junk-Removal Pros
+      {/* HERO with gradient + blob */}
+      <div className="relative overflow-hidden text-center py-24 px-4 bg-gradient-to-br from-orange-500 via-orange-400 to-yellow-200">
+        {/* floating blob */}
+        <svg
+          className="absolute -top-32 -left-32 w-[500px] h-[500px] text-orange-300 opacity-30 animate-pulse"
+          viewBox="0 0 200 200"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill="currentColor"
+            d="M56.1,-57.6C71.9,-41,80.6,-20.5,79.3,-0.4C77.9,19.6,66.5,39.2,50.6,55.2C34.6,71.1,14.3,83.4,-4.5,84.5C-23.3,85.6,-46.5,75.4,-60.6,58.5C-74.7,41.6,-79.6,18,-78.9,-6.3C-78.3,-30.6,-71.9,-55.4,-57.7,-72C-43.5,-88.5,-21.7,-96.7,-0.6,-96C20.5,-95.2,41,-85.5,56.1,-57.6Z"
+            transform="translate(100 100)"
+          />
+        </svg>
+
+        <h1 className="relative text-5xl font-bold mb-4 text-white drop-shadow">
+          Meet <span className="text-black">Lily Bell</span> — The AI Built for
+          Commercial Junk-Removal Pros
         </h1>
-        <p className="text-xl max-w-3xl mx-auto mb-8">
-          She’s not just smart. She’s not just fast. She’s the first AI trained
-          by nine-figure revenue leaders in your industry.
+        <p className="relative text-xl max-w-3xl mx-auto mb-10 text-white/90">
+          She’s trained by nine-figure revenue leaders—so you sell smarter and
+          3-5× faster.
         </p>
-        <div className="flex justify-center gap-4">
-          <a
-            href="#roi"
-            className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg text-lg shadow"
-          >
-            Get a Free Demo
-          </a>
-          <a
-            href="#how"
-            className="border border-orange-500 text-orange-500 px-8 py-4 rounded-lg text-lg"
-          >
-            How It Works
-          </a>
+
+        {/* Hero CTAs + mock-up */}
+        <div className="relative flex flex-col lg:flex-row items-center gap-8 lg:gap-16 max-w-5xl mx-auto">
+          {/* CTAs */}
+          <div className="flex flex-col gap-4">
+            <a
+              href="#roi"
+              className="inline-block bg-black text-white px-8 py-4 rounded-lg text-lg shadow-lg transition-transform hover:scale-105"
+            >
+              Get a Free Demo
+            </a>
+            <a
+              href="#how"
+              className="inline-block border border-black text-black px-8 py-4 rounded-lg text-lg transition hover:bg-black hover:text-white"
+            >
+              How It Works
+            </a>
+          </div>
+
+          {/* mock-up image (replace /mock.png) */}
+          <Image
+            src="/mock.png"
+            alt="PitchBotics mock-up"
+            width={420}
+            height={280}
+            className="rounded-xl shadow-xl hidden lg:block"
+            data-aos="zoom-in"
+          />
         </div>
       </div>
 
       {/* WHAT CAN SHE DO */}
-      <Section>
+      <Section data-aos="fade-up">
         <H2>What Can Lily Bell Do?</H2>
         <div className="grid md:grid-cols-3 gap-8">
           {[
             [
               'Onboarding Like a Pro',
-              'Walks new reps step-by-step so they sound seasoned on day 1.',
+              'Walks new reps step-by-step so they sound seasoned on Day 1.',
             ],
             [
               'Live Rebuttals + Coaching',
@@ -77,6 +106,7 @@ export default function Home() {
             <div
               key={title}
               className="shadow-xl p-6 rounded-xl hover:shadow-2xl transition"
+              data-aos="fade-up"
             >
               <h3 className="text-2xl font-bold mb-2 text-orange-600">
                 {title}
@@ -89,7 +119,7 @@ export default function Home() {
 
       {/* FEATURES */}
       <div id="how" className="bg-orange-50">
-        <Section>
+        <Section data-aos="fade-up">
           <H2>She’s Not a Tool — She’s a Teammate</H2>
           <p className="text-lg max-w-3xl mx-auto mb-8 text-center">
             Built by CROs, VPs, and territory dominators, Lily Bell coaches,
@@ -100,19 +130,19 @@ export default function Home() {
             <li>✅ Real-time objection handling</li>
             <li>✅ Tone & delivery analysis</li>
             <li>✅ Custom game-plan builder</li>
-            <li>✅ 3–5× output in 90 days</li>
+            <li>✅ 3-5× output in 90 days</li>
           </ul>
         </Section>
       </div>
 
       {/* ROI CALCULATOR */}
-      <Section id="roi">
+      <Section id="roi" data-aos="fade-up">
         <H2>What’s 30 Minutes with Lily Worth?</H2>
         <p className="text-center mb-6">
           Use Lily just 30 min/day — if you don’t 5× output in 90 days, you
           don’t pay.
         </p>
-        <div className="mx-auto max-w-xl bg-white border border-orange-200 p-6 rounded-xl shadow">
+        <div className="mx-auto max-w-xl backdrop-blur-sm bg-white/70 border border-orange-200 p-6 rounded-xl shadow">
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="font-semibold block mb-1"># Sales Reps</label>
@@ -125,7 +155,7 @@ export default function Home() {
             </div>
             <div>
               <label className="font-semibold block mb-1">
-                Avg Monthly Rev / Rep ($)
+                Avg Monthly&nbsp;Rev / Rep ($)
               </label>
               <input
                 type="number"
@@ -140,15 +170,16 @@ export default function Home() {
             ${baseline.toLocaleString()}
           </p>
           <p className="text-center text-2xl font-bold text-orange-600 mt-2">
-            With Lily: ${(baseline * 3).toLocaleString()} –{' '}
-            ${(baseline * 5).toLocaleString()} / mo
+            With Lily:{' '}
+            {(baseline * 3).toLocaleString('en-US')} –{' '}
+            {(baseline * 5).toLocaleString('en-US')} / mo
           </p>
         </div>
       </Section>
 
       {/* TESTIMONIALS */}
       <div className="bg-orange-100">
-        <Section>
+        <Section data-aos="fade-up">
           <H2>What Teams Are Saying</H2>
           <div className="grid md:grid-cols-2 gap-6">
             {[
@@ -164,6 +195,7 @@ export default function Home() {
               <div
                 key={who}
                 className="bg-white p-6 rounded-xl shadow hover:shadow-xl transition"
+                data-aos="fade-up"
               >
                 <p className="italic mb-2">“{quote}”</p>
                 <p className="font-semibold">— {who}</p>
@@ -175,14 +207,14 @@ export default function Home() {
 
       {/* FOOTER */}
       <footer className="bg-black text-white text-center py-10">
-        <p className="text-xl mb-2">
+        <p className="text-xl mb-3">
           Lily Bell isn’t just software. She’s the cheat-code everyone wishes
           they had.
         </p>
         <p className="italic mb-6">This is you — fully activated.</p>
         <a
           href="#roi"
-          className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg text-lg"
+          className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg text-lg transition-transform hover:-translate-y-1"
         >
           Try Lily Bell Now
         </a>
